@@ -3,7 +3,7 @@ package com.douglas.repository;
 import java.math.BigDecimal;
 import java.util.List;
 
-import org.springframework.boot.data.autoconfigure.web.DataWebProperties.Pageable;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
@@ -50,14 +50,14 @@ public interface ProdutoRepository  extends JpaRepository<Produto, Long>,
     @Query("""
             SELECT p FROM Produto p
             WHERE p.ativo = true
-                AND (:categoria IS NULL OR p.categoria = :categoria)
+                AND (:categoria IS NULL OR CAST(p.categoria AS string) = :categoria)
                 AND (:precoMin IS NULL OR p.preco >= :precoMin)
                 AND (:precoMax IS NULL OR p.preco <= :precoMax)
                 AND (:nome IS NULL OR LOWER(p.nome) LIKE LOWER(CONCAT('%', :nome, '%')))
             ORDER BY p.preco ASC
             """)
     Page<Produto> buscarComFiltros(
-        @Param("categoria") Categoria ctegoria,
+        @Param("categoria") Categoria categoria,
         @Param("precoMin") BigDecimal precoMin,
         @Param("precoMax") BigDecimal precoMax,
         @Param("nome") String nome,
