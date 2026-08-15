@@ -49,7 +49,7 @@ public interface ProdutoRepository  extends JpaRepository<Produto, Long>,
     // Busca completa com multiplos filtros opcionais (usando COALESCE no JPQL)
     @Query("""
             SELECT p FROM Produto p
-            WHERES p.ativo = true
+            WHERE p.ativo = true
                 AND (:categoria IS NULL OR p.categoria = :categoria)
                 AND (:precoMin IS NULL OR p.preco >= :precoMin)
                 AND (:precoMax IS NULL OR p.preco <= :precoMax)
